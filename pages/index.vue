@@ -7,6 +7,8 @@ useHead({
   title: "生成对联",
 });
 
+const { copy, copied } = useClipboard();
+
 const { generateCouplet } = useCoupletGenerator();
 
 const couplet = ref<Couplet | null>({
@@ -72,6 +74,36 @@ const onDownloadClick = async () => {
     copingOrDownloading.value = false;
   }
 };
+
+const onShareClick = async () => {
+  const url = `
+我用 AI 对联生成器生成了一副对联，你也来试试吧！
+「${couplet.value?.上联}，${couplet.value?.下联}」
+  横批：${couplet.value?.横批}
+${window.location.origin}/?prompt=${encodeURIComponent(
+    input_prompt.value
+  )}&couplets=${encodeURIComponent(JSON.stringify(couplet.value))}&invertFu=${
+    invertFu.value
+  }&invertCouplet=${invertCouplet.value}`;
+
+  await copy(url);
+  if (copied.value) {
+    alert("已复制分享链接");
+  }
+};
+
+onMounted(() => {
+  const params = new URLSearchParams(window.location.search);
+  const p_prompt = params.get("prompt");
+  const p_couplets = params.get("couplets");
+  const p_invertFu = params.get("invertFu");
+  const p_invertCouplet = params.get("invertCouplet");
+
+  if (p_prompt) input_prompt.value = p_prompt;
+  if (p_couplets) couplet.value = JSON.parse(p_couplets);
+  if (p_invertFu) invertFu.value = p_invertFu === "true";
+  if (p_invertCouplet) invertCouplet.value = p_invertCouplet === "true";
+});
 </script>
 
 <template>
@@ -116,15 +148,17 @@ const onDownloadClick = async () => {
               </div>
             </div>
             <div class="flex items-center gap-2 flex-col-reverse sm:flex-row">
+              <Button soft @click="onShareClick">分享</Button>
               <Button
                 soft
                 :loading="copingOrDownloading"
                 @click="onDownloadClick"
-                >下载图片</Button
               >
-              <Button soft :loading="copingOrDownloading" @click="onCopyClick"
-                >复制图片</Button
-              >
+                下载图片
+              </Button>
+              <Button soft :loading="copingOrDownloading" @click="onCopyClick">
+                复制图片
+              </Button>
               <Button :loading="generating" @click="onGenerateClick">
                 生成对联
               </Button>
