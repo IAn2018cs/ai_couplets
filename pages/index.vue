@@ -40,7 +40,11 @@ const onCopyClick = async () => {
   copingOrDownloading.value = true;
   try {
     const blob = await toBlob(cRef, { quality: 1, includeQueryParams: true });
-    const { copy } = useClipboardItems();
+    const { copy, isSupported } = useClipboardItems();
+    if (!isSupported.value) {
+      alert("当前浏览器不支持复制图片到剪贴板");
+      return;
+    }
     await copy([new ClipboardItem({ "image/png": blob! })]);
     alert("已复制图片到剪贴板");
   } catch (e) {
