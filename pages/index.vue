@@ -23,6 +23,7 @@ const coupletsComp = useTemplateRef("couplets");
 const input_prompt = ref("");
 const invertFu = ref(false);
 const invertCouplet = ref(false);
+const blackText = ref(false);
 
 const generating = ref(false);
 const copingOrDownloading = ref(false);
@@ -97,11 +98,13 @@ onMounted(() => {
   const p_couplets = params.get("couplets");
   const p_invertFu = params.get("invertFu");
   const p_invertCouplet = params.get("invertCouplet");
+  const p_blackText = params.get("blackText");
 
   if (p_prompt) input_prompt.value = p_prompt;
   if (p_couplets) couplet.value = JSON.parse(p_couplets);
   if (p_invertFu) invertFu.value = p_invertFu === "true";
   if (p_invertCouplet) invertCouplet.value = p_invertCouplet === "true";
+  if (p_blackText) blackText.value = p_blackText === "true";
 });
 </script>
 
@@ -114,6 +117,7 @@ onMounted(() => {
         ref="couplets"
         :couplet="couplet!"
         :invert-fu="invertFu"
+        :black-text="blackText"
         :first-line-on-right="invertCouplet"
       />
 
@@ -143,6 +147,15 @@ onMounted(() => {
                 </label>
                 <span class="text-neutral-500 dark:text-neutral-400">
                   反转对联
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="toggle">
+                  <input v-model="blackText" type="checkbox" />
+                  <span class="slider"></span>
+                </label>
+                <span class="text-neutral-500 dark:text-neutral-400">
+                  {{ blackText ? "黑" : "黄" }}字
                 </span>
               </div>
             </div>

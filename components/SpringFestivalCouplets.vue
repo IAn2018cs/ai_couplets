@@ -13,6 +13,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  blackText: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const coupletsRef = ref<HTMLElement | null>(null);
@@ -20,14 +24,18 @@ defineExpose({ coupletsRef });
 </script>
 
 <template>
-  <div class="flex flex-col items-center MaShanZheng" ref="coupletsRef">
+  <div
+    :class="`${blackText ? 'text-black' : 'text-amber-300'}`"
+    class="flex flex-col items-center MaShanZheng"
+    ref="coupletsRef"
+  >
     <!-- 横批 -->
     <div
       class="couplets text-5xl font-bold px-3 py-2 mb-12 relative overflow-hidden"
     >
       <span>{{
         firstLineOnRight
-          ? couplet?.横批.split("").reverse().join('')
+          ? couplet?.横批.split("").reverse().join("")
           : couplet?.横批
       }}</span>
     </div>
@@ -63,7 +71,7 @@ defineExpose({ coupletsRef });
   background-blend-mode: multiply;
   background-image: url("/pattern/paper.png");
   background-size: cover;
-  @apply bg-[#ee3f4d] text-amber-300 shadow-lg rounded-sm tracking-widest;
+  @apply bg-[#ee3f4d] shadow-lg rounded-sm tracking-widest;
 }
 
 .text-vertical {
