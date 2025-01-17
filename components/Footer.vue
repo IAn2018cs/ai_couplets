@@ -7,7 +7,7 @@
         class="text-center font-medium text-neutral-500 dark:text-neutral-500 space-y-1"
       >
         <a
-          href=""
+          href="https://github.com/HoshinoSuzumi/ai_couplets"
           class="text-sm inline-flex items-center gap-1"
           target="_blank"
         >
