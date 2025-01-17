@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { toBlob } from "html-to-image";
+import { toBlob, toPng } from "html-to-image";
 import { useClipboardItems } from "@vueuse/core";
 import { type Couplet } from "~/types";
 
@@ -45,7 +45,7 @@ const onCopyClick = async () => {
       alert("当前浏览器不支持复制图片到剪贴板");
       return;
     }
-    await copy([new ClipboardItem({ "image/png": blob! })]);
+    if (blob) await copy([new ClipboardItem({ "image/png": blob })]);
     alert("已复制图片到剪贴板");
   } catch (e) {
     console.error(e);
@@ -60,12 +60,11 @@ const onDownloadClick = async () => {
   if (!cRef) return;
   copingOrDownloading.value = true;
   try {
-    const blob = await toBlob(cRef, { quality: 1, includeQueryParams: true });
+    const dataUrl = await toPng(cRef, { quality: 1, includeQueryParams: true });
     const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob!);
+    a.href = dataUrl;
     a.download = `${couplet.value?.横批}_${couplet.value?.总结}_AI 对联.png`;
     a.click();
-    URL.revokeObjectURL(a.href);
   } catch (e) {
     console.error(e);
     alert("下载失败，请重试");
