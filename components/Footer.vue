@@ -29,10 +29,16 @@ const buildTime = new Date(
         >
           <span>个人主页</span>
         </a>
-        <p class="text-xs space-x-1">
+        <p class="text-xs">
+          <a href="https://deepseek.com" class="text-blue-500" target="_blank">
+            DeepSeek
+          </a>
+          提供强劲动力
+        </p>
+        <p v-if="commitHash && buildTime" class="text-xs space-x-1 pt-4">
           <span
             >版本: v{{ pkg.version }} (<a
-              :href="``"
+              :href="`https://github.com/HoshinoSuzumi/ai_couplets/commit/${commitHash}`"
               class="border-b border-dashed border-neutral-500 dark:border-neutral-500 hover:border-neutral-400 dark:hover:border-neutral-400"
               target="_blank"
               >{{ commitHash || "unknown" }}</a
@@ -43,12 +49,7 @@ const buildTime = new Date(
             {{ buildTime !== "1970/1/1" ? buildTime : "unknown" }}</span
           >
         </p>
-        <p class="text-xs pt-4">
-          <a href="https://deepseek.com" class="text-blue-500" target="_blank">
-            DeepSeek
-          </a>
-          提供强劲动力
-        </p>
+        <p v-else class="text-xs pt-4">版本: v{{ pkg.version }}</p>
       </div>
     </div>
   </footer>
