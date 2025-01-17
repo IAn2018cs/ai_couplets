@@ -76,8 +76,7 @@ const onDownloadClick = async () => {
 };
 
 const onShareClick = async () => {
-  const url = `
-我用 AI 对联生成器生成了一副对联，你也来试试吧！
+  const url = `我用 AI 对联生成器生成了一副对联，你也来试试吧！
 「${couplet.value?.上联}，${couplet.value?.下联}」
   横批：${couplet.value?.横批}
 ${window.location.origin}/?prompt=${encodeURIComponent(
