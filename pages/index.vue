@@ -39,7 +39,7 @@ const onCopyClick = async () => {
   if (!cRef) return;
   copingOrDownloading.value = true;
   try {
-    const blob = await toBlob(cRef, { quality: 1, includeQueryParams: true });
+    const blob = await toBlob(cRef, { includeQueryParams: true });
     const { copy, isSupported } = useClipboardItems();
     if (!isSupported.value) {
       alert("当前浏览器不支持复制图片到剪贴板");
@@ -60,7 +60,7 @@ const onDownloadClick = async () => {
   if (!cRef) return;
   copingOrDownloading.value = true;
   try {
-    const dataUrl = await toPng(cRef, { quality: 1, includeQueryParams: true });
+    const dataUrl = await toPng(cRef, { includeQueryParams: true });
     const a = document.createElement("a");
     a.href = dataUrl;
     a.download = `${couplet.value?.横批}_${couplet.value?.总结}_AI 对联.png`;
