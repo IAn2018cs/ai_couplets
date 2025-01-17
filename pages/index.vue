@@ -23,6 +23,7 @@ const invertFu = ref(false);
 const invertCouplet = ref(false);
 
 const generating = ref(false);
+const copingOrDownloading = ref(false);
 
 const onGenerateClick = async () => {
   generating.value = true;
@@ -36,20 +37,27 @@ const onGenerateClick = async () => {
 const onCopyClick = async () => {
   const cRef = coupletsComp.value?.coupletsRef;
   if (!cRef) return;
+  copingOrDownloading.value = true;
   const blob = await toBlob(cRef, { quality: 1 });
   const { copy } = useClipboardItems();
   await copy([new ClipboardItem({ "image/png": blob! })]);
+  copingOrDownloading.value = false;
   alert("已复制图片到剪贴板");
 };
 
 const onDownloadClick = () => {
   const cRef = coupletsComp.value?.coupletsRef;
   if (!cRef) return;
+  copingOrDownloading.value = true;
   toPng(cRef).then((dataUrl) => {
     const a = document.createElement("a");
     a.href = dataUrl;
     a.download = `${couplet.value?.横批}_${couplet.value?.总结}_AI 对联.png`;
     a.click();
+  }).catch(() => {
+    alert("下载失败");
+  }).finally(() => {
+    copingOrDownloading.value = false;
   });
 };
 </script>
@@ -96,8 +104,8 @@ const onDownloadClick = () => {
               </div>
             </div>
             <div class="flex items-center gap-2 flex-col-reverse sm:flex-row">
-              <Button soft @click="onDownloadClick">下载图片</Button>
-              <Button soft @click="onCopyClick">复制图片</Button>
+              <Button soft :loading="copingOrDownloading" @click="onDownloadClick">下载图片</Button>
+              <Button soft :loading="copingOrDownloading" @click="onCopyClick">复制图片</Button>
               <Button :loading="generating" @click="onGenerateClick">
                 生成对联
               </Button>
