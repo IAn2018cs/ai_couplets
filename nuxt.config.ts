@@ -11,5 +11,9 @@ export default defineNuxtConfig({
     "@nuxtjs/seo",
     "@nuxt/image",
     "@nuxt/icon",
+    "nuxt-gtag",
   ],
+  gtag: {
+    id: "G-0FNJ9942NH",
+  },
 });

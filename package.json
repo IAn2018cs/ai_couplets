@@ -22,6 +22,7 @@
     "dotenv": "^16.4.7",
     "html-to-image": "^1.11.11",
     "nuxt": "^3.15.2",
+    "nuxt-gtag": "3.0.2",
     "openai": "^4.78.1",
     "pinia": "^2.3.0",
     "pinia-plugin-persistedstate": "4.2.0",
