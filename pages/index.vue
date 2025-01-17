@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { toBlob, toPng } from "html-to-image";
+import { toBlob } from "html-to-image";
 import { useClipboardItems } from "@vueuse/core";
 import { type Couplet } from "~/types";
 
@@ -38,27 +38,36 @@ const onCopyClick = async () => {
   const cRef = coupletsComp.value?.coupletsRef;
   if (!cRef) return;
   copingOrDownloading.value = true;
-  const blob = await toBlob(cRef, { quality: 1 });
-  const { copy } = useClipboardItems();
-  await copy([new ClipboardItem({ "image/png": blob! })]);
-  copingOrDownloading.value = false;
-  alert("已复制图片到剪贴板");
+  try {
+    const blob = await toBlob(cRef, { quality: 1, includeQueryParams: true });
+    const { copy } = useClipboardItems();
+    await copy([new ClipboardItem({ "image/png": blob! })]);
+    alert("已复制图片到剪贴板");
+  } catch (e) {
+    console.error(e);
+    alert("复制失败，请重试");
+  } finally {
+    copingOrDownloading.value = false;
+  }
 };
 
-const onDownloadClick = () => {
+const onDownloadClick = async () => {
   const cRef = coupletsComp.value?.coupletsRef;
   if (!cRef) return;
   copingOrDownloading.value = true;
-  toPng(cRef).then((dataUrl) => {
+  try {
+    const blob = await toBlob(cRef, { quality: 1, includeQueryParams: true });
     const a = document.createElement("a");
-    a.href = dataUrl;
+    a.href = URL.createObjectURL(blob!);
     a.download = `${couplet.value?.横批}_${couplet.value?.总结}_AI 对联.png`;
     a.click();
-  }).catch(() => {
-    alert("下载失败");
-  }).finally(() => {
+    URL.revokeObjectURL(a.href);
+  } catch (e) {
+    console.error(e);
+    alert("下载失败，请重试");
+  } finally {
     copingOrDownloading.value = false;
-  });
+  }
 };
 </script>
 
@@ -104,8 +113,15 @@ const onDownloadClick = () => {
               </div>
             </div>
             <div class="flex items-center gap-2 flex-col-reverse sm:flex-row">
-              <Button soft :loading="copingOrDownloading" @click="onDownloadClick">下载图片</Button>
-              <Button soft :loading="copingOrDownloading" @click="onCopyClick">复制图片</Button>
+              <Button
+                soft
+                :loading="copingOrDownloading"
+                @click="onDownloadClick"
+                >下载图片</Button
+              >
+              <Button soft :loading="copingOrDownloading" @click="onCopyClick"
+                >复制图片</Button
+              >
               <Button :loading="generating" @click="onGenerateClick">
                 生成对联
               </Button>
