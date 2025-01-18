@@ -36,7 +36,7 @@ const onGenerateClick = async () => {
   couplet.value = coup;
   useTrackEvent("generate_couplet", {
     prompt: input_prompt.value,
-    couplet: coup,
+    couplet: [coup.横批, coup.上联, coup.下联, coup.总结].join(","),
   });
   generating.value = false;
 };
