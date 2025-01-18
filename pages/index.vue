@@ -129,7 +129,7 @@ onMounted(() => {
         <div class="space-y-2">
           <textarea
             v-model="input_prompt"
-            placeholder="你想生成什么主题、风格的对联？"
+            placeholder="你想生成什么主题的对联？"
             :rows="4"
             :disabled="generating"
           />
