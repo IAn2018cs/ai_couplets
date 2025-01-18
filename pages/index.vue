@@ -34,11 +34,11 @@ const onGenerateClick = async () => {
     prompt: input_prompt.value,
   });
   couplet.value = coup;
-  useTrackEvent("generate_couplet", {
-    prompt: input_prompt.value,
-    couplet: [coup.横批, coup.上联, coup.下联, coup.总结].join(","),
-  });
   generating.value = false;
+  useTrackEvent("search", {
+    search_term: input_prompt.value,
+    result_term: [coup.横批, coup.上联, coup.下联, coup.总结].join(","),
+  })
 };
 
 const onCopyClick = async () => {
@@ -94,6 +94,11 @@ ${window.location.origin}/?prompt=${encodeURIComponent(
   if (copied.value) {
     alert("已复制分享链接");
   }
+  useTrackEvent('share', {
+    method: 'copy',
+    content_type: 'text',
+    content_id: url,
+  })
 };
 
 onMounted(() => {
