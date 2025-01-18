@@ -34,6 +34,10 @@ const onGenerateClick = async () => {
     prompt: input_prompt.value,
   });
   couplet.value = coup;
+  useTrackEvent("generate_couplet", {
+    prompt: input_prompt.value,
+    couplet: coup,
+  });
   generating.value = false;
 };
 
