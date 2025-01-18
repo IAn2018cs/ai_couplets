@@ -30,15 +30,21 @@ const copingOrDownloading = ref(false);
 
 const onGenerateClick = async () => {
   generating.value = true;
+  useTrackEvent("search", {
+    search_term: input_prompt.value || "No prompt",
+  })
   const coup = await generateCouplet({
     prompt: input_prompt.value,
   });
   couplet.value = coup;
   generating.value = false;
-  useTrackEvent("search", {
-    search_term: input_prompt.value,
-    result_term: [coup.横批, coup.上联, coup.下联, coup.总结].join(","),
-  })
+  setTimeout(() => {
+    // 冗余埋点
+    useTrackEvent("generate_couplet", {
+      prompt: input_prompt.value || "No prompt",
+      couplet: [coup.横批, coup.上联, coup.下联, coup.总结].join(","),
+    });
+  }, 200);
 };
 
 const onCopyClick = async () => {
