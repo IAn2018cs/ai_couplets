@@ -84,7 +84,7 @@ defineExpose({ coupletsRef });
 }
 
 .diamond-fu {
-  box-shadow: 0 0 0 8px rgb(232, 44, 59), 0 0 0 12px #fde047;
+  box-shadow: 0 0 0 8px #e82c3b, 0 0 0 12px #fde047;
 }
 
 /* Fonts */
