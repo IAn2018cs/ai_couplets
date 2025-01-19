@@ -17,6 +17,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  replaceFu: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const coupletsRef = ref<HTMLElement | null>(null);
@@ -54,7 +58,7 @@ defineExpose({ coupletsRef });
         <span
           class="absolute inset-0 flex justify-center items-center font-bold text-7xl transform -rotate-45"
         >
-          {{ couplet?.总结 }}
+          {{ replaceFu ? couplet?.总结 : "福" }}
         </span>
       </div>
 

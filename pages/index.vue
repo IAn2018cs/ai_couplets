@@ -24,6 +24,7 @@ const input_prompt = ref("");
 const invertFu = ref(false);
 const invertCouplet = ref(false);
 const blackText = ref(false);
+const replaceFu = ref(true);
 
 const generating = ref(false);
 const copingOrDownloading = ref(false);
@@ -94,7 +95,7 @@ ${window.location.origin}/?prompt=${encodeURIComponent(
     input_prompt.value
   )}&couplets=${encodeURIComponent(JSON.stringify(couplet.value))}&invertFu=${
     invertFu.value
-  }&invertCouplet=${invertCouplet.value}&blackText=${blackText.value}`;
+  }&invertCouplet=${invertCouplet.value}&blackText=${blackText.value}&reFu=${replaceFu.value}`;
 
   await copy(url);
   if (copied.value) {
@@ -114,12 +115,14 @@ onMounted(() => {
   const p_invertFu = params.get("invertFu");
   const p_invertCouplet = params.get("invertCouplet");
   const p_blackText = params.get("blackText");
+  const p_replaceFu = params.get("reFu");
 
   if (p_prompt) input_prompt.value = p_prompt;
   if (p_couplets) couplet.value = JSON.parse(p_couplets);
   if (p_invertFu) invertFu.value = p_invertFu === "true";
   if (p_invertCouplet) invertCouplet.value = p_invertCouplet === "true";
   if (p_blackText) blackText.value = p_blackText === "true";
+  if (p_replaceFu) replaceFu.value = p_replaceFu === "true";
 });
 </script>
 
@@ -162,6 +165,15 @@ onMounted(() => {
                 </label>
                 <span class="text-neutral-500 dark:text-neutral-400">
                   反转对联
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="toggle">
+                  <input v-model="replaceFu" type="checkbox" />
+                  <span class="slider"></span>
+                </label>
+                <span class="text-neutral-500 dark:text-neutral-400">
+                  替换福字
                 </span>
               </div>
               <div class="flex items-center gap-2">
