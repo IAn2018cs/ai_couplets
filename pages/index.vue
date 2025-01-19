@@ -32,7 +32,7 @@ const onGenerateClick = async () => {
   generating.value = true;
   useTrackEvent("search", {
     search_term: input_prompt.value || "No prompt",
-  })
+  });
   const coup = await generateCouplet({
     prompt: input_prompt.value,
   });
@@ -94,17 +94,17 @@ ${window.location.origin}/?prompt=${encodeURIComponent(
     input_prompt.value
   )}&couplets=${encodeURIComponent(JSON.stringify(couplet.value))}&invertFu=${
     invertFu.value
-  }&invertCouplet=${invertCouplet.value}`;
+  }&invertCouplet=${invertCouplet.value}&blackText=${blackText.value}`;
 
   await copy(url);
   if (copied.value) {
     alert("已复制分享链接");
   }
-  useTrackEvent('share', {
-    method: 'copy',
-    content_type: 'text',
+  useTrackEvent("share", {
+    method: "copy",
+    content_type: "text",
     content_id: url,
-  })
+  });
 };
 
 onMounted(() => {
