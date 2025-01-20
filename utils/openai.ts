@@ -39,6 +39,7 @@ export const generateCouplet = async (prompt: string): Promise<Couplet> => {
     max_tokens: 100,
     messages: presetMessages,
     model: process.env.OPENAI_MODEL || "deepseek-chat",
+    temperature: 1.5,
   });
 
   console.log(completion.choices[0].message.content);
