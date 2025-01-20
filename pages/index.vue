@@ -55,7 +55,6 @@ const onCopyClick = async () => {
   try {
     const blob = await toBlob(cRef, {
       includeQueryParams: true,
-      skipFonts: true,
     });
     const { copy, isSupported } = useClipboardItems();
     if (!isSupported.value) {
@@ -79,7 +78,6 @@ const onDownloadClick = async () => {
   try {
     const dataUrl = await toPng(cRef, {
       includeQueryParams: true,
-      skipFonts: true,
     });
     const a = document.createElement("a");
     a.href = dataUrl;
