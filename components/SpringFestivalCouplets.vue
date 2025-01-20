@@ -37,16 +37,19 @@ defineExpose({ coupletsRef });
     <div
       class="couplets text-4xl sm:text-5xl font-bold px-3 py-2 mb-12 relative overflow-hidden"
     >
-      <span>{{
-        firstLineOnRight
-          ? couplet?.横批.split("").reverse().join("")
-          : couplet?.横批
-      }}</span>
+      <span
+        :class="{
+          'text-rtl': firstLineOnRight,
+        }"
+        >{{ couplet?.横批 }}</span
+      >
     </div>
 
     <div class="flex justify-between items-center w-full">
       <!-- 左联 -->
-      <div class="couplets text-vertical text-4xl sm:text-5xl text-center px-3 py-4">
+      <div
+        class="couplets text-vertical text-4xl sm:text-5xl text-center px-3 py-4"
+      >
         {{ firstLineOnRight ? couplet?.下联 : couplet?.上联 }}
       </div>
 
@@ -63,7 +66,9 @@ defineExpose({ coupletsRef });
       </div>
 
       <!-- 右联 -->
-      <div class="couplets text-vertical text-4xl sm:text-5xl text-center px-3 py-4">
+      <div
+        class="couplets text-vertical text-4xl sm:text-5xl text-center px-3 py-4"
+      >
         {{ firstLineOnRight ? couplet?.上联 : couplet?.下联 }}
       </div>
     </div>
@@ -81,6 +86,11 @@ defineExpose({ coupletsRef });
 .text-vertical {
   writing-mode: vertical-rl;
   text-orientation: upright;
+}
+
+.text-rtl {
+  direction: rtl;
+  unicode-bidi: bidi-override;
 }
 
 .diamond-fu {
