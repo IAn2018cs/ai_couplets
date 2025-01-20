@@ -80,7 +80,7 @@ defineExpose({ coupletsRef });
   background-blend-mode: multiply;
   background-image: url("/pattern/paper.png");
   background-size: cover;
-  @apply bg-[#ee3f4d] shadow-lg rounded-sm tracking-widest;
+  @apply bg-[#ee3f4d] rounded-sm tracking-widest;
 }
 
 .text-vertical {
@@ -94,7 +94,8 @@ defineExpose({ coupletsRef });
 }
 
 .diamond-fu {
-  box-shadow: 0 0 0 8px #e82c3b, 0 0 0 12px #fde047;
+  @apply rounded-sm;
+  /* box-shadow: 0 0 0 8px #e82c3b, 0 0 0 12px #fde047; */
 }
 
 /* Fonts */
