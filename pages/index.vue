@@ -8,6 +8,7 @@ useHead({
 });
 
 const { copy, copied } = useClipboard();
+const { isSupported: isClipItemsSupported } = useClipboardItems();
 
 const { generateCouplet } = useCoupletGenerator();
 
@@ -53,7 +54,10 @@ const onCopyClick = async () => {
   if (!cRef) return;
   copingOrDownloading.value = true;
   try {
-    const blob = await toBlob(cRef, { includeQueryParams: true });
+    const blob = await toBlob(cRef, {
+      includeQueryParams: true,
+      skipFonts: true,
+    });
     const { copy, isSupported } = useClipboardItems();
     if (!isSupported.value) {
       alert("当前浏览器不支持复制图片到剪贴板");
@@ -74,7 +78,10 @@ const onDownloadClick = async () => {
   if (!cRef) return;
   copingOrDownloading.value = true;
   try {
-    const dataUrl = await toPng(cRef, { includeQueryParams: true });
+    const dataUrl = await toPng(cRef, {
+      includeQueryParams: true,
+      skipFonts: true,
+    });
     const a = document.createElement("a");
     a.href = dataUrl;
     a.download = `${couplet.value?.横批}_${couplet.value?.总结}_AI 对联.png`;
@@ -95,7 +102,9 @@ ${window.location.origin}/?prompt=${encodeURIComponent(
     input_prompt.value
   )}&couplets=${encodeURIComponent(JSON.stringify(couplet.value))}&invertFu=${
     invertFu.value
-  }&invertCouplet=${invertCouplet.value}&blackText=${blackText.value}&reFu=${replaceFu.value}`;
+  }&invertCouplet=${invertCouplet.value}&blackText=${blackText.value}&reFu=${
+    replaceFu.value
+  }`;
 
   await copy(url);
   if (copied.value) {
@@ -130,17 +139,19 @@ onMounted(() => {
   <div class="container max-w-[1280px] mx-auto p-4">
     <Topbar class="mb-10" />
 
-    <div class="px-0 sm:px-20">
-      <SpringFestivalCouplets
-        ref="couplets"
-        :couplet="couplet!"
-        :invert-fu="invertFu"
-        :black-text="blackText"
-        :first-line-on-right="invertCouplet"
-        :replace-fu="replaceFu"
-      />
+    <div class="flex flex-col sm:flex-row items-center gap-12">
+      <div class="w-full sm:w-[600px] mx-auto">
+        <SpringFestivalCouplets
+          ref="couplets"
+          :couplet="couplet!"
+          :invert-fu="invertFu"
+          :black-text="blackText"
+          :first-line-on-right="invertCouplet"
+          :replace-fu="replaceFu"
+        />
+      </div>
 
-      <div class="mt-10">
+      <div class="flex-1">
         <div class="space-y-2">
           <textarea
             v-model="input_prompt"
@@ -148,8 +159,14 @@ onMounted(() => {
             :rows="4"
             :disabled="generating"
           />
-          <div class="flex w-full justify-between gap-2">
-            <div class="flex items-center gap-4 flex-col-reverse sm:flex-row">
+          <div class="space-y-4">
+            <Button @click="onGenerateClick" :loading="generating" block>
+              生成对联
+            </Button>
+            <div
+              class="w-full h-[1px] bg-neutral-200/50 dark:bg-neutral-700/50"
+            ></div>
+            <div class="flex items-center justify-between gap-2 flex-wrap">
               <div class="flex items-center gap-2">
                 <label class="toggle">
                   <input v-model="invertFu" type="checkbox" />
@@ -187,20 +204,28 @@ onMounted(() => {
                 </span>
               </div>
             </div>
-            <div class="flex items-center gap-2 flex-col-reverse sm:flex-row">
-              <Button soft @click="onShareClick">分享</Button>
+            <div
+              class="w-full h-[1px] bg-neutral-200/50 dark:bg-neutral-700/50"
+            ></div>
+            <div class="grid grid-cols-2 gap-3">
+              <Button soft @click="onShareClick" block>分享链接</Button>
               <Button
+                v-if="isClipItemsSupported"
                 soft
+                @click="onCopyClick"
                 :loading="copingOrDownloading"
-                @click="onDownloadClick"
+                block
               >
-                下载图片
-              </Button>
-              <Button soft :loading="copingOrDownloading" @click="onCopyClick">
                 复制图片
               </Button>
-              <Button :loading="generating" @click="onGenerateClick">
-                生成对联
+              <Button
+                soft
+                @click="onDownloadClick"
+                :loading="copingOrDownloading"
+                block
+                class="sm:col-span-2"
+              >
+                下载图片
               </Button>
             </div>
           </div>
@@ -213,6 +238,10 @@ onMounted(() => {
 </template>
 
 <style>
+body {
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' opacity='0.035' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='75' height='74.82' patternTransform='scale(1) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='%23ffffff00'/><path d='M0 0v5.19A5.19 5.19 0 0 0 5.19 0Zm69.81 0A5.19 5.19 0 0 0 75 5.19V0ZM37.5 32.22a5.19 5.19 0 0 0-5.19 5.19 5.19 5.19 0 0 0 5.19 5.19 5.19 5.19 0 0 0 5.19-5.2 5.19 5.19 0 0 0-5.19-5.18zM0 69.63v5.19h5.19A5.19 5.19 0 0 0 0 69.63zm75 0a5.19 5.19 0 0 0-5.19 5.19H75z'  stroke-width='1' stroke='none' fill='hsla(47,80.9%,61%,1)'/><path d='M18.9 0c0 13.34 17.13 23.85 17.86 24.3.03 0 .05.01.08.03l.06.03.05.01a.8.8 0 0 0 .46 0l.05-.01.06-.03.08-.04c.73-.44 17.86-10.95 17.86-24.29h-1.62c0 7.92-6.88 15.01-11.9 19.14 3.12-4.4 6.85-11.3 6.85-19.14h-1.62c0 8.64-4.97 16.26-8.09 20.19A78.2 78.2 0 0 0 41.9 0h-1.62c0 9.15-1.97 17.14-3.1 20.95A76.67 76.67 0 0 1 34.08 0h-1.62c0 8.46 1.65 15.95 2.82 20.2C32.16 16.26 27.2 8.64 27.2 0h-1.62c0 7.85 3.73 14.74 6.86 19.14C27.4 15 20.53 7.92 20.53 0ZM0 13v3.46c1.13 3.8 3.1 11.8 3.1 20.95 0 9.15-1.97 17.14-3.1 20.95v3.46a.8.8 0 0 0 .23-.04l.05-.01.06-.03.08-.04c.73-.44 17.86-10.95 17.86-24.29S1.15 13.56.42 13.11c-.03 0-.05-.01-.08-.03l-.06-.03-.05-.01A.82.82 0 0 0 .02 13H0zm75 0h-.02a.79.79 0 0 0-.2.04l-.06.01-.06.03-.08.04c-.73.44-17.86 10.95-17.86 24.3 0 13.33 17.13 23.84 17.86 24.28l.08.04.06.03.05.01a.8.8 0 0 0 .23.04v-3.47a76.69 76.69 0 0 1-3.1-20.94c0-9.15 1.97-17.13 3.1-20.94zM1.9 17.21c3.12 3.93 8.09 11.55 8.09 20.2 0 8.64-4.97 16.26-8.09 20.19a78.18 78.18 0 0 0 2.82-20.2c0-8.45-1.65-15.94-2.82-20.19zm71.2.01a78.15 78.15 0 0 0-2.82 20.19c0 8.46 1.65 15.95 2.82 20.2-3.12-3.93-8.09-11.55-8.09-20.2 0-8.64 4.97-16.26 8.09-20.19zM4.75 18.27c5.03 4.13 11.9 11.22 11.9 19.14S9.79 52.42 4.76 56.55c3.13-4.4 6.86-11.3 6.86-19.14 0-7.85-3.73-14.74-6.86-19.14zm65.5 0c-3.13 4.4-6.86 11.3-6.86 19.14 0 7.85 3.73 14.74 6.86 19.14-5.03-4.13-11.9-11.22-11.9-19.14s6.87-15.01 11.9-19.14zM37.18 50.41h-.02a.8.8 0 0 0-.2.04l-.06.01-.06.03-.08.04c-.73.44-17.86 10.95-17.86 24.29h1.62c0-7.93 6.88-15.01 11.9-19.14-3.12 4.4-6.85 11.3-6.85 19.14h1.62c0-8.64 4.97-16.26 8.09-20.2a78.14 78.14 0 0 0-2.82 20.2h1.62c0-9.15 1.97-17.14 3.1-20.95 1.13 3.8 3.1 11.8 3.1 20.95h1.62a78.2 78.2 0 0 0-2.82-20.2c3.12 3.93 8.09 11.54 8.09 20.2h1.62c0-7.85-3.73-14.74-6.86-19.14 5.03 4.13 11.9 11.22 11.9 19.14h1.63c0-13.34-17.13-23.85-17.86-24.3-.03 0-.05-.01-.08-.03l-.06-.03-.05-.01a.82.82 0 0 0-.21-.04h-.02z'  stroke-width='1' stroke='none' fill='hsla(4.1,89.6%,58.4%,1)'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,-0.64)' fill='url(%23a)'/></svg>");
+}
+
 /* Button */
 button {
   @apply px-4 py-2 bg-amber-500 text-white rounded-md font-medium;

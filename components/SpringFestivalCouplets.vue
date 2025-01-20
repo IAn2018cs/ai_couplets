@@ -35,7 +35,7 @@ defineExpose({ coupletsRef });
   >
     <!-- 横批 -->
     <div
-      class="couplets text-5xl font-bold px-3 py-2 mb-12 relative overflow-hidden"
+      class="couplets text-4xl sm:text-5xl font-bold px-3 py-2 mb-12 relative overflow-hidden"
     >
       <span>{{
         firstLineOnRight
@@ -46,24 +46,24 @@ defineExpose({ coupletsRef });
 
     <div class="flex justify-between items-center w-full">
       <!-- 左联 -->
-      <div class="couplets text-vertical text-5xl text-center px-3 py-4">
+      <div class="couplets text-vertical text-4xl sm:text-5xl text-center px-3 py-4">
         {{ firstLineOnRight ? couplet?.下联 : couplet?.上联 }}
       </div>
 
       <!-- 福字 -->
       <div
-        class="relative couplets w-24 h-24 transform transition-transform duration-500 overflow-hidden diamond-fu"
+        class="relative couplets w-20 h-20 sm:w-24 sm:h-24 transform transition-transform duration-500 overflow-hidden diamond-fu"
         :style="{ transform: `rotate(${invertFu ? 225 : 45}deg)` }"
       >
         <span
-          class="absolute inset-0 flex justify-center items-center font-bold text-7xl transform -rotate-45"
+          class="absolute inset-0 flex justify-center items-center font-bold text-5xl sm:text-7xl transform -rotate-45"
         >
           {{ replaceFu ? couplet?.总结 : "福" }}
         </span>
       </div>
 
       <!-- 右联 -->
-      <div class="couplets text-vertical text-5xl text-center px-3 py-4">
+      <div class="couplets text-vertical text-4xl sm:text-5xl text-center px-3 py-4">
         {{ firstLineOnRight ? couplet?.上联 : couplet?.下联 }}
       </div>
     </div>

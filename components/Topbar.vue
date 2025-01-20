@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <header class="bg-neutral-100 dark:bg-neutral-800 text-center rounded py-4">
+  <header class="bg-neutral-50 dark:bg-neutral-800 text-center rounded py-4">
     <h1 class="text-3xl font-bold dark:text-neutral-400">
       <span
         class="font-medium"
