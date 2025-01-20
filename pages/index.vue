@@ -219,7 +219,7 @@ onMounted(() => {
                 @click="onDownloadClick"
                 :loading="copingOrDownloading"
                 block
-                class="sm:col-span-2"
+                class="col-span-2"
               >
                 下载图片
               </Button>
