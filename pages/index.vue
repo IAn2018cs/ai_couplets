@@ -76,13 +76,17 @@ const onDownloadClick = async () => {
   if (!cRef) return;
   copingOrDownloading.value = true;
   try {
-    const dataUrl = await toPng(cRef, {
+    const blob = await toBlob(cRef, {
       includeQueryParams: true,
     });
-    const a = document.createElement("a");
-    a.href = dataUrl;
-    a.download = `${couplet.value?.横批}_${couplet.value?.总结}_AI 对联.png`;
-    a.click();
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${couplet.value?.横批}_${couplet.value?.总结}_AI 对联.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
   } catch (e) {
     console.error(e);
     alert("下载失败，请重试");
