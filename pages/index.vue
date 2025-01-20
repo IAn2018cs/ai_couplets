@@ -137,6 +137,7 @@ onMounted(() => {
         :invert-fu="invertFu"
         :black-text="blackText"
         :first-line-on-right="invertCouplet"
+        :replace-fu="replaceFu"
       />
 
       <div class="mt-10">
