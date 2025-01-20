@@ -8,7 +8,6 @@ useHead({
 });
 
 const { copy, copied } = useClipboard();
-const { isSupported: isClipItemsSupported } = useClipboardItems();
 
 const { generateCouplet } = useCoupletGenerator();
 
@@ -67,7 +66,7 @@ const onCopyClick = async () => {
     alert("已复制图片到剪贴板");
   } catch (e) {
     console.error(e);
-    alert("复制失败，请重试");
+    alert("复制失败，当前浏览器可能不支持复制图片");
   } finally {
     copingOrDownloading.value = false;
   }
@@ -210,7 +209,6 @@ onMounted(() => {
             <div class="grid grid-cols-2 gap-3">
               <Button soft @click="onShareClick" block>分享链接</Button>
               <Button
-                v-if="isClipItemsSupported"
                 soft
                 @click="onCopyClick"
                 :loading="copingOrDownloading"
