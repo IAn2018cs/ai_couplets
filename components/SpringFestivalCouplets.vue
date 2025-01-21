@@ -35,6 +35,7 @@ defineExpose({ coupletsRef });
   >
     <!-- 横批 -->
     <div
+      contenteditable
       class="couplets text-4xl sm:text-5xl font-bold px-3 py-2 mb-12 relative overflow-hidden"
     >
       <span
@@ -48,6 +49,7 @@ defineExpose({ coupletsRef });
     <div class="flex justify-between items-center w-full">
       <!-- 左联 -->
       <div
+        contenteditable
         class="couplets text-vertical text-4xl sm:text-5xl text-center px-3 py-4"
       >
         {{ firstLineOnRight ? couplet?.下联 : couplet?.上联 }}
@@ -67,6 +69,7 @@ defineExpose({ coupletsRef });
 
       <!-- 右联 -->
       <div
+        contenteditable
         class="couplets text-vertical text-4xl sm:text-5xl text-center px-3 py-4"
       >
         {{ firstLineOnRight ? couplet?.上联 : couplet?.下联 }}
