@@ -157,6 +157,7 @@ onMounted(() => {
           <textarea
             v-model="input_prompt"
             placeholder="你想生成什么主题的对联？"
+            :maxlength="100"
             :rows="4"
             :disabled="generating"
           />
