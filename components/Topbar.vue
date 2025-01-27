@@ -12,9 +12,6 @@
         AI </span
       >对联生成器
     </h1>
-    <span class="text-neutral-400 dark:text-neutral-600 text-xs font-bold">
-      新年笑传之 Create Couplets Bro
-    </span>
   </header>
 </template>
 

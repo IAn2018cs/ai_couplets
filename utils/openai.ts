@@ -6,6 +6,16 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const extractJSON = (response: string): string => {
+  response = response.replace(/```(json)?\n?/g, "").trim();
+  const jsonStart = response.indexOf("{");
+  const jsonEnd = response.lastIndexOf("}");
+  if (jsonStart === -1 || jsonEnd === -1) {
+    throw new Error("No valid JSON found in response");
+  }
+  return response.slice(jsonStart, jsonEnd + 1);
+};
+
 export const generateCouplet = async (prompt: string): Promise<Couplet> => {
   prompt = prompt.trim().slice(0, parseInt(process.env.MAX_TOKENS || "100"));
 
@@ -42,5 +52,6 @@ export const generateCouplet = async (prompt: string): Promise<Couplet> => {
 
   console.log(completion.choices[0].message.content);
 
-  return JSON.parse(completion.choices[0].message.content as unknown as string);
+  const jsonStr = extractJSON(completion.choices[0].message.content as string);
+  return JSON.parse(jsonStr);
 };

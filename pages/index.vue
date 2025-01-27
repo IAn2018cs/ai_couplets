@@ -21,10 +21,7 @@ const couplet = ref<Couplet | null>({
 const coupletsComp = useTemplateRef("couplets");
 
 const input_prompt = ref("");
-const invertFu = ref(false);
-const invertCouplet = ref(false);
 const blackText = ref(false);
-const replaceFu = ref(true);
 
 const generating = ref(false);
 const copingOrDownloading = ref(false);
@@ -101,11 +98,7 @@ const onShareClick = async () => {
   横批：${couplet.value?.横批}
 ${window.location.origin}/?prompt=${encodeURIComponent(
     input_prompt.value
-  )}&couplets=${encodeURIComponent(JSON.stringify(couplet.value))}&invertFu=${
-    invertFu.value
-  }&invertCouplet=${invertCouplet.value}&blackText=${blackText.value}&reFu=${
-    replaceFu.value
-  }`;
+  )}&couplets=${encodeURIComponent(JSON.stringify(couplet.value))}&blackText=${blackText.value}`;
 
   await copy(url);
   if (copied.value) {
@@ -122,17 +115,11 @@ onMounted(() => {
   const params = new URLSearchParams(window.location.search);
   const p_prompt = params.get("prompt");
   const p_couplets = params.get("couplets");
-  const p_invertFu = params.get("invertFu");
-  const p_invertCouplet = params.get("invertCouplet");
   const p_blackText = params.get("blackText");
-  const p_replaceFu = params.get("reFu");
 
   if (p_prompt) input_prompt.value = p_prompt;
   if (p_couplets) couplet.value = JSON.parse(p_couplets);
-  if (p_invertFu) invertFu.value = p_invertFu === "true";
-  if (p_invertCouplet) invertCouplet.value = p_invertCouplet === "true";
   if (p_blackText) blackText.value = p_blackText === "true";
-  if (p_replaceFu) replaceFu.value = p_replaceFu === "true";
 });
 </script>
 
@@ -145,14 +132,11 @@ onMounted(() => {
         <SpringFestivalCouplets
           ref="couplets"
           :couplet="couplet!"
-          :invert-fu="invertFu"
           :black-text="blackText"
-          :first-line-on-right="invertCouplet"
-          :replace-fu="replaceFu"
         />
       </div>
 
-      <div class="flex-1">
+      <div class="flex-1 w-full sm:w-[400px]">
         <div class="space-y-2">
           <textarea
             v-model="input_prompt"
@@ -168,34 +152,7 @@ onMounted(() => {
             <div
               class="w-full h-[1px] bg-neutral-200/50 dark:bg-neutral-700/50"
             ></div>
-            <div class="flex items-center justify-between gap-2 flex-wrap">
-              <div class="flex items-center gap-2">
-                <label class="toggle">
-                  <input v-model="invertFu" type="checkbox" />
-                  <span class="slider"></span>
-                </label>
-                <span class="text-neutral-500 dark:text-neutral-400">
-                  反转福字
-                </span>
-              </div>
-              <div class="flex items-center gap-2">
-                <label class="toggle">
-                  <input v-model="invertCouplet" type="checkbox" />
-                  <span class="slider"></span>
-                </label>
-                <span class="text-neutral-500 dark:text-neutral-400">
-                  反转对联
-                </span>
-              </div>
-              <div class="flex items-center gap-2">
-                <label class="toggle">
-                  <input v-model="replaceFu" type="checkbox" />
-                  <span class="slider"></span>
-                </label>
-                <span class="text-neutral-500 dark:text-neutral-400">
-                  替换福字
-                </span>
-              </div>
+            <div class="flex items-center justify-center gap-2 flex-wrap">
               <div class="flex items-center gap-2">
                 <label class="toggle">
                   <input v-model="blackText" type="checkbox" />
@@ -209,7 +166,7 @@ onMounted(() => {
             <div
               class="w-full h-[1px] bg-neutral-200/50 dark:bg-neutral-700/50"
             ></div>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-3 gap-3">
               <Button soft @click="onShareClick" block>分享链接</Button>
               <Button
                 soft
@@ -224,7 +181,6 @@ onMounted(() => {
                 @click="onDownloadClick"
                 :loading="copingOrDownloading"
                 block
-                class="col-span-2"
               >
                 下载图片
               </Button>
